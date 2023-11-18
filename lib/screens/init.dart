@@ -1,44 +1,44 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:go_router/go_router.dart';
 
-import 'home.dart';
+import '../functions/regedit.dart';
 
 class InitPage extends StatelessWidget {
   const InitPage({super.key});
 
-  final String state = "初始化程序";
-
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
-    loadProgram(context);
-    return ScaffoldPage(
-      content: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Text(
-              "不知岛",
-              style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+    return FutureBuilder(
+        future: Future.delayed(const Duration(seconds: 3), () {
+          return;
+        }),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (Regedit.readInt('FirstRun') != 1) {
+                context.goNamed('tutorial');
+              }
+            });
+          }
+          return const ScaffoldPage(
+            content: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    "不知岛",
+                    style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                  ),
+                  Column(
+                    children: [
+                      ProgressBar(),
+                    ],
+                  )
+                ],
+              ),
             ),
-            Column(
-              children: [
-                Text(state),
-                const ProgressBar(),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  void loadProgram(BuildContext context) async {
-    if (context.mounted) {
-      await Future.delayed(const Duration(seconds: 3));
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        debugPrint('不知岛 已启动');
-        Navigator.pushAndRemoveUntil(context, FluentPageRoute(builder: (builder) => const HomePage()), (route) => false);
-      });
-    }
+          );
+        });
   }
 }

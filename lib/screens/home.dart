@@ -14,6 +14,7 @@ class _HomePage extends State<HomePage> with WindowListener {
   @override
   void initState() {
     windowManager.addListener(this);
+    windowManager.startDragging();
     super.initState();
   }
 
@@ -57,8 +58,7 @@ class _HomePage extends State<HomePage> with WindowListener {
             children: [
               Card(
                   child: Align(
-                      child: Text('不知岛',
-                          style: TextStyle(fontSize: 20)))),
+                      child: Text('不知岛', style: TextStyle(fontSize: 20)))),
             ],
           ),
         ),
